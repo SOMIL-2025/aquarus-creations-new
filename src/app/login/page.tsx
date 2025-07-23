@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
   const handleLogin = async () => {
     try {
