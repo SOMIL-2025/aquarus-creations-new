@@ -1,65 +1,68 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { auth } from "@/lib/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import Link from "next/link";
 
 export default function SignupPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      router.push('/blogs');
-    } catch (e: any) {
-      setError('Signup failed. Try a stronger password or different email.');
-      console.error(e.message);
+      router.push("/blogs");
+    } catch (e) {
+      setError("Signup failed. Please try again.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
+    <div className="min-h-screen bg-gradient-to-b from-black via-purple-800 to-black flex items-center justify-center text-white">
       <form
         onSubmit={handleSignup}
-        className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-2xl shadow-2xl w-96"
+        className="bg-black/50 p-8 rounded-lg w-full max-w-md"
       >
-        <h2 className="text-3xl font-bold text-white mb-6 text-center tracking-wide">
-          Sign up to <span className="text-[#00BFFF]">Aquarus</span>
-        </h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Create an Account</h2>
 
-        {error && (
-          <p className="text-red-400 text-sm text-center mb-4">{error}</p>
-        )}
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
+        <label className="block mb-2">Email</label>
         <input
           type="email"
-          placeholder="Email"
-          className="w-full mb-4 px-4 py-2 bg-white/10 text-white placeholder-white/70 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BFFF]"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+          className="w-full p-2 mb-4 rounded text-black"
           required
         />
 
+        <label className="block mb-2">Password</label>
         <input
           type="password"
-          placeholder="Password"
-          className="w-full mb-6 px-4 py-2 bg-white/10 text-white placeholder-white/70 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00BFFF]"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+          className="w-full p-2 mb-6 rounded text-black"
           required
         />
 
         <button
           type="submit"
-          className="w-full bg-[#00BFFF] hover:bg-[#009acd] transition-all text-white py-2 rounded-lg font-semibold shadow-md"
+          className="w-full bg-purple-600 hover:bg-purple-700 transition p-2 rounded"
         >
-          Create Account
+          Sign Up
         </button>
+
+        <p className="mt-4 text-center text-sm">
+          Already have an account?{" "}
+          <Link href="/login" className="text-purple-400 hover:underline">
+            Log in
+          </Link>
+        </p>
       </form>
     </div>
   );
